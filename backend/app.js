@@ -1,22 +1,23 @@
-import express from "express"
-import dotenv from 'dotenv'
-import { connectDatabase } from "./config/dbConnect";
+import express from "express";
+import dotenv from "dotenv";
+import { connectDatabase } from "./config/dbConnect.js";
 import productRoutes from "./routes/products.js";
+
 const app = express();
 
+dotenv.config({ path: "backend/config/config.env" });
 
-dotenv.config({path:"backend/config/config.env"})
-const PORT = process.env.PORT || 3000
-// connecting Database
-connectDatabase()
-// import all routes
+// Parse JSON bodies
+app.use(express.json());
 
+// Connect Database
+connectDatabase();
 
-app.use("/api/v1", productRoutes)
+// Routes
+app.use("/api/v1", productRoutes);
 
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT,()=>{
-    console.log(`server is started successfully on ${PORT} in ${NODE_ENV} mode`)
-}
-
-)
+app.listen(PORT, () => {
+    console.log(`server is started successfully on ${PORT} in ${process.env.NODE_ENV || "development"} mode`);
+});
